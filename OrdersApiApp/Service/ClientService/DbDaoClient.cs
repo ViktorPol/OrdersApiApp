@@ -20,9 +20,16 @@ namespace OrdersApiApp.Service.ClientService
             return client;
         }
 
-        public Task<bool> DeleteClient(int id)
+        public async Task<bool> DeleteClient(int id)
         {
-            throw new NotImplementedException();
+            Client? client = await db.Clients.FirstOrDefaultAsync((client) => client.Id == id);
+            if (client != null)
+            {
+                db.Clients.Remove(client);
+                db.SaveChanges();
+                return true;
+            }
+            return true;
         }
 
         public async Task<List<Client>> GetAllClients()
@@ -35,9 +42,11 @@ namespace OrdersApiApp.Service.ClientService
             throw new NotImplementedException();
         }
 
-        public Task<Client> UpdateClient(Client client)
+        public async Task<Client> UpdateClient(Client client)
         {
-            throw new NotImplementedException();
+            db.Clients.Update(client);
+            await db.SaveChangesAsync();
+            return client;
         }
     }
 }
